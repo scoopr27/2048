@@ -18,6 +18,8 @@ function KeyboardInputManager() {
   // Store frame for motion functions
   var waitTime = -1; 
   var self = this;
+  var ERROR = .2
+  var wait = 750000
   // Setup Leap loop with frame callback function
   var controllerOptions = {enableGestures: true};
 
@@ -32,27 +34,28 @@ function KeyboardInputManager() {
           if (waitTime < frame.timestamp){
           switch (gesture.type) {
             case "swipe":
+              console.log(gesture.speed);
               var dx = gesture.direction[0];
               var dy = gesture.direction[1];
-              var ERROR = .4
-              if (dx > ERROR){
-                console.log("RIGHT");
-                self.emit("move", 1);
-                waitTime = frame.timestamp + 1000000;
-              }else if (dx < -ERROR){
-                console.log("LEFT");
-                self.emit("move", 3);
-                waitTime = frame.timestamp + 1000000;
-              }else if (dy > ERROR){
-                console.log("UP");
-                self.emit("move", 0);
-                waitTime = frame.timestamp + 1000000;
-              }else if (dy < -ERROR){
-                console.log("DOWN");
-                self.emit("move", 2);
-                waitTime = frame.timestamp + 1000000;
+
+              if (Math.abs(dx) > Math.abs(dy)){
+                if (dx > ERROR){
+                  self.emit("move", 1);
+                  waitTime = frame.timestamp + wait;
+                }else if (dx < -ERROR){
+                  self.emit("move", 3);
+                  waitTime = frame.timestamp + wait;
+                }
               }
-              break;
+              else{
+                if (dy > ERROR){
+                  self.emit("move", 0);
+                  waitTime = frame.timestamp + wait;
+                }else if (dy < -ERROR){
+                  self.emit("move", 2);
+                  waitTime = frame.timestamp + wait;
+                }
+              }
             default:
               break;
           }
@@ -70,7 +73,6 @@ KeyboardInputManager.prototype.on = function (event, callback) {
 };
 
 KeyboardInputManager.prototype.emit = function (event, data) {
-  console.log(this.events);
   var callbacks = this.events[event];
   if (callbacks) {
     callbacks.forEach(function (callback) {
