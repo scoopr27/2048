@@ -38,19 +38,19 @@ function KeyboardInputManager() {
               if (dx > ERROR){
                 console.log("RIGHT");
                 self.emit("move", 1);
-                waitTime = frame.timestamp + 1000000;
+            //    waitTime = frame.timestamp + 1000000;
               }else if (dx < -ERROR){
                 console.log("LEFT");
                 self.emit("move", 3);
-                waitTime = frame.timestamp + 1000000;
+           //     waitTime = frame.timestamp + 1000000;
               }else if (dy > ERROR){
                 console.log("UP");
                 self.emit("move", 0);
-                waitTime = frame.timestamp + 1000000;
+           //     waitTime = frame.timestamp + 1000000;
               }else if (dy < -ERROR){
                 console.log("DOWN");
                 self.emit("move", 2);
-                waitTime = frame.timestamp + 1000000;
+          //      waitTime = frame.timestamp + 1000000;
               }
               break;
             default:
